@@ -56,11 +56,12 @@ def await_mail(to_call_on, queue_name=None):
 
     backoff = 0
     while True:
-        msgs = q.get_messages(visibility_timeout=30, wait_time_seconds=3)
+        msgs = q.get_messages(visibility_timeout=30, wait_time_seconds=20)
         if len(msgs) == 0:
             if backoff == 0:
-                backoff = 1
-            print "backing off"
+                backoff = 2
+            elif backoff > 90:
+                backoff = 2
             time.sleep(backoff)
             backoff *= 2
             continue
