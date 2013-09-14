@@ -7,7 +7,7 @@ RULE_ACTIONS = ('MV', 'RM', 'READ', 'FLAG')
 
 class Rule(_Base):
     __tablename__ = "rules"
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, unique=True, primary_key=True)
     query = Column(Unicode(255))
     action = Column(Unicode(255))
     owner_id = Column(Integer, ForeignKey('users.id'))

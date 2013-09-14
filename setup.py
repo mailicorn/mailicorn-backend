@@ -36,7 +36,7 @@ setup(name='mailicorn',
         'imapclient'
     ],
     entry_points = """\
-    [entry_points]
+    [console_scripts]
       syncworker = mailicorn.workers.sync:main
     [paste.app_factory]
     main = mailicorn:main

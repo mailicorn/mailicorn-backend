@@ -25,13 +25,14 @@ class Message(_Base):
 class User(_Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, unique=True, primary_key=True)
     email = Column(Unicode(255))
     name = Column(Unicode(255))
     password = Column(Unicode(255))
-    rules = relationship("Rule")
-    accounts = relationship("Account")
-    messages = relationship("Message")
+    rules = relationship("Rule", backref="user")
+    accounts = relationship("Account", backref="user")
+    messages = relationship("Message", backref="user")
+
 
     def to_dict(self):
         return {'id': self.id,

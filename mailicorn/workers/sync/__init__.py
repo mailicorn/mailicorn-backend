@@ -3,7 +3,7 @@ from gevent.monkey import patch_all
 patch_all()
 import boto
 from boto.sqs.message import Message
-from mailicorn.models import DBSession
+from mailicorn.models import DBSession, GimmieDatDB
 from mailicorn.models.users import User
 from imapclient import IMAPClient
 import pylibmc
@@ -121,5 +121,6 @@ def main():
     inifile = sys.argv[1]
     config = ConfigParser()
     config.read(inifile)
+    GimmieDatDB(config)
     sw = SyncWorker(config)
     sw.run()
