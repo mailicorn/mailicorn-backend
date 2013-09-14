@@ -1,11 +1,23 @@
-from mailicorn.models import _Base
-from sqlalchemy import Integer, Unicode, Column
+from mailicorn.models import _Base, DBSession
+from sqlalchemy import Integer, Unicode, Column, ForeignKey
 from sqlalchemy.orm import relationship
 
 
 class Message(_Base):
     __tablename__ = 'mids'
-    id = Column(Unicode(255))
+    id = Column(Unicode(255), primary_key=True)
+    owner_id = Column(Integer, ForeignKey('users.id'))
+
+    @classmethod
+    def rules_by_mid(cls, mid):
+        msg_query = DBSession.query(Message).filter(Message.id==mid)
+        if msg_query.count() == 0:
+            return None
+        owner_id = msg_query.one().owner_id
+        owner_query = DBSession.query(User).filter(User.id==owner_id)
+        if owner_query.count() == 0:
+            return None
+        return owner_query.one().rules
 
 
 class User(_Base):
