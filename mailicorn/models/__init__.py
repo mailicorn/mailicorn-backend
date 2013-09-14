@@ -1,9 +1,17 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy import create_engine
 
 
 _Base = declarative_base()
 DBSession = scoped_session(sessionmaker())
+
+
+def GimmieDatDB(config):
+    engine = create_engine(config['sqlalchemy.uri'])
+    _Base.metadata.bind = engine
+    DBSession.configure(bind=engine)
+
 
 def initialize_sql(engine):
     DBSession.configure(bind=engine)
