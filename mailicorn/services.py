@@ -11,5 +11,4 @@ MailTags = Service('mail-tags', '/mail/{id}/tags/', description='Grab/Edit mail 
 MailPage = Service('mail-page', '/mail/page/{offset}', description='Grab pages of mail')
 
 
-SearchTags = Service('search', '/search/tags', description='Search for tags')
-SearchText = Service('search-fulltext', '/search/text', description='Search by full text')
+Search = Service('search', '/search', description='Search for all the things')

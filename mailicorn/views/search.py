@@ -1,4 +1,4 @@
-from mailicorn.services import SearchTags, SearchText
+from mailicorn.services import Search
 from mailicorn.validators import LoggedIn, ValidText
 
 
@@ -24,5 +24,3 @@ def SearchByParams(request):
     }
     """
     pass
-
-
