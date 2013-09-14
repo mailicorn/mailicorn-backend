@@ -1,5 +1,22 @@
 import boto
 import time
+import memcache
+
+
+memcache_host = '127.0.0.1:11211'
+
+client = memcache.Client([memcache_host], debug=0)
+
+
+def get_msg_body(mid):
+    return mc.get(mid)
+
+bucket = boto.connect_s3().get_bucket('archive.mailicorn.com')
+def archive_mail(mid):
+    body = get_msg_body(mid)
+    key = bucket.new_key(mid)
+    key.set_contents_from_string(body)
+    return True
 
 
 cs = boto.connect_cloudsearch()
@@ -7,6 +24,10 @@ sqs = boto.connect_sqs()
 
 mail_search = cs.lookup('mailicorn-1')
 doc_service = mail_search.get_document_service()
+
+
+def index_document(mid):
+    doc_service.add(mid, mid, )
 
 
 def await_mail(to_call_on, queue_name=None):
@@ -31,10 +52,3 @@ def await_mail(to_call_on, queue_name=None):
         print "Of type ", type(msg)
         msg.delete()
         exit()
-
-
-def index_document(mid):
-    doc_service.add(mid, mid, )
-
-if __name__ == '__main__':
-    await_mail(index_document)
