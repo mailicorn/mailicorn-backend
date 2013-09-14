@@ -1,0 +1,5 @@
+#!/bin/env python
+from mailicorn.worker import await_mail, index_document
+
+if __name__ == '__main__':
+    await_mail(index_document, 'write-to-search')
