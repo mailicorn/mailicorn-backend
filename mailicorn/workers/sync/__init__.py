@@ -10,6 +10,8 @@ import pylibmc
 import time
 import hashlib
 import json
+import sys
+from ConfigParser import ConfigParser
 
 
 def GetFromQueue(queue):
@@ -54,6 +56,12 @@ class SyncWorker(object):
 
 
     def imap_sync(self, account):
+        """
+        Run as a greenlet to sit in the background and shit
+        data into sqs/EC/S3
+        :param account: The Account information we need for sync
+        :type account: mailicorn.models.accounts.Account
+        """
         host = account.host
         port = account.port
         ssl = account.ssl
@@ -93,6 +101,9 @@ class SyncWorker(object):
 
 
     def run(self):
+        """
+        Worker run loop, consume sqs messages and sync the users they secificy
+        """
         while True:
             msg = GetFromQueue(self.sync_queue)
             user_id = int(msg.body())
@@ -106,3 +117,9 @@ class SyncWorker(object):
                 gevent.spawn(self.imap_sync, account)
             self.sync_queue.delete(msg)
 
+def main():
+    inifile = sys.argv[1]
+    config = ConfigParser()
+    config.read(inifile)
+    sw = SyncWorker(config)
+    sw.run()
