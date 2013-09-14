@@ -111,7 +111,9 @@ class SyncWorker(object):
         """
         while True:
             msg = GetFromQueue(self.sync_queue)
-            user_id = int(msg.get_body())
+            loaded_msg = json.loads(msg.get_body())
+            user_id = loaded_msg['uid']
+            isForced = loaded_msg['forced']
             user_query = DBSession.query(User).filter(User.id==user_id)
             if user_query.count() == 0:
                 self.sync_queue.delete_message(msg)
@@ -120,7 +122,11 @@ class SyncWorker(object):
             user = user_query.one()
             for account in user.accounts:
                 gevent.spawn(self.imap_sync, account)
-            self.sync_queue.delete_message(msg)
+            if isForced:
+                self.sync_queue.delete_message(msg)
+            else:
+                account = user.accounts[0]
+                self.msg.change_visibility(account.sync_int)
 
 def main():
     inifile = sys.argv[1]
