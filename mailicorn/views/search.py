@@ -3,14 +3,13 @@ from mailicorn.validators import LoggedIn, ValidText
 
 import boto
 
-cs_conn = boto.cloudsearch.connect_to_region('us-east-1')
-
 
 @Search.get(validators=[LoggedIn, ValidText])
 def SearchByParams(request):
     """
     ,<-
     {
+        "owner": "<query>"
         "to": "<query>",
         "from": "<query>",
         "cc": "<query>",
