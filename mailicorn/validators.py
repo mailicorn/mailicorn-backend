@@ -1,5 +1,6 @@
 import json
-from mailicorn.models import DBSession, User
+from mailicorn.models import DBSession
+from mailicorn.models.users import User
 from pyramid.security import authenticated_userid
 from pyramid.httpexceptions import HTTPUnauthorized, HTTPExpectationFailed
 from re import compile

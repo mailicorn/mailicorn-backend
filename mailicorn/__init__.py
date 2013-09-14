@@ -3,6 +3,9 @@
 from pyramid.config import Configurator
 from sqlalchemy import create_engine
 from mailicorn.models import initialize_sql
+from pyramid.authorization import ACLAuthorizationPolicy
+from pyramid.authentication import AuthTktAuthenticationPolicy
+from pyramid.session import UnencryptedCookieSessionFactoryConfig
 
 
 def main(global_config, **settings):
