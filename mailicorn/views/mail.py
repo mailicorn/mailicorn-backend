@@ -1,8 +1,10 @@
-from mailicorn.services import MailID, Mail
+from mailicorn.services import MailID, Mail, Sync
 from mailicorn.validators import LoggedIn, ValidJSON, ValidFields, JSON
 from mailicorn.models import DBSession
 from mailicorn.models.users import User
 from pyramid.httpexceptions import HTTPForbidden
+from boto.sqs.message import Message
+import boto
 import pylibmc
 import json
 
@@ -23,4 +25,17 @@ def GetMailByID(request):
 def GetMailIDs(request):
     mids = [m.id for m in  request.validated['user'].messages]
     return {'mids': mids}
+
+
+@Sync.post(validators=[LoggedIn])
+def ForceSync(request):
+    user = request.validated['user']
+    sqs = boto.connect_sqs()
+    sync_queue = sqs.get_queue(
+        request.registry.settings['queue.sync'])
+    msg = Message()
+    msg.set_body(json.dumps({'uid': user.id, 'forced': True}))
+    sync_queue.write(msg)
+
+
 

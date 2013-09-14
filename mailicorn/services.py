@@ -5,7 +5,9 @@ Users = Service("users", "/users", description='User management api')
 UsersLogin = Service('users-login', '/users/login', description='Login a user in')
 UsersLogout = Service('users-logout', '/users/logout')
 
+
 Accounts = Service("accounts", "/accounts", description='Account management api')
+
 
 Mail = Service('mail', '/mail', description='Get all MIDs for a user')
 MailID = Service('mail-id', '/mail/id/{id}', description='Manage Email via ID')
@@ -14,3 +16,6 @@ MailPage = Service('mail-page', '/mail/page/{offset}', description='Grab pages o
 
 
 Search = Service('search', '/search', description='Search for all the things')
+
+
+Sync = Service('sync', '/sync', description='Sync Yo Data Boi')
