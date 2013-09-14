@@ -32,6 +32,8 @@ setup(name='mailicorn',
         'sqlalchemy',
         'boto',
         'pylibmc',
+        'gevent',
+        'imapclient'
     ],
     entry_points = """\
     [paste.app_factory]
