@@ -3,6 +3,11 @@ from sqlalchemy import Integer, Unicode, Column
 from sqlalchemy.orm import relationship
 
 
+class Message(_Base):
+    __tablename__ = 'mids'
+    id = Column(Unicode(255))
+
+
 class User(_Base):
     __tablename__ = "users"
 
@@ -12,11 +17,13 @@ class User(_Base):
     password = Column(Unicode(255))
     rules = relationship("Rule")
     accounts = relationship("Account")
+    messages = relationship("Message")
 
     def to_dict(self):
         return {'id': self.id,
                 'name': self.name,
                 'email': self.email,
                 'rules': [r.to_dict() for r in self.rules],
-                'accounts': [a.to_dict() for a in self.accounts]
+                'accounts': [a.to_dict() for a in self.accounts],
+                'mids': [m.id for m in self.messages]
                 }
