@@ -8,7 +8,7 @@ DBSession = scoped_session(sessionmaker())
 
 
 def GimmieDatDB(config):
-    engine = create_engine(config['sqlalchemy.uri'])
+    engine = create_engine(config.get('app:main', 'sqlalchemy.uri'))
     _Base.metadata.bind = engine
     DBSession.configure(bind=engine)
 
