@@ -4,7 +4,7 @@ from mailicorn.validators import LoggedIn, ValidJSON
 import boto
 
 cloudsearch = boto.connect_cloudsearch()
-mail_search = cloudsearch.lookup('mailicorn-1')
+mail_search = cloudsearch.lookup('mailicorn-2')
 search_service = mail_search.get_search_service()
 
 
@@ -33,12 +33,12 @@ def SearchByParams(request):
     """
     facets = [
         "owner",
-        "from",
         "folder",
-        "mid",
         "hasattachment",
     ]
     fields = [
+        "mid",
+        "from",
         "to",
         "cc",
         "bcc",
@@ -47,15 +47,20 @@ def SearchByParams(request):
         "fulltext",
     ]
     querydict = request.validated['json']
+    query_params = {
+        'return_fields': ['mid', 'subject', 'tags', 'from'],
+    }
     if any([querydict.get(f, None) is not None for f in facets]):
         print ("Got some facets")
+        for facet, constraint in [(f, querydict.get(f, None)) for f in facets
+                                  if querydict.get(f, None) is not None]:
+            query_params['facet'] = facet
+            query_params['facet_constraints'] = constraint
 
     for t in fields:
         if querydict.get(t, None) is not None:
             # add it to the query
-            pass
-    result = search_service.search(
-        q=querydict['fulltext'],
-        facet=['owner'],
-        facet_constraints={'owner': request.validated['user'].name})
+            query_params['q'] = query_params.get('q', '') + querydict[t] + ' '
+
+    result = search_service.search(**query_params)
     return result.docs
