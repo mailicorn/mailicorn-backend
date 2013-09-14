@@ -7,7 +7,7 @@ from sqlalchemy.orm import relationship
 
 class Message(_Base):
     __tablename__ = 'mids'
-    id = Column(Unicode, primary_key=True)
+    id = Column(Unicode(512), primary_key=True)
     owner_id = Column(Integer, ForeignKey('users.id'))
 
     @classmethod
