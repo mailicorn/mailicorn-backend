@@ -2,7 +2,7 @@
 """
 from pyramid.config import Configurator
 from sqlalchemy import create_engine
-from spacehub.models import initialize_sql
+from mailicorn.models import initialize_sql
 
 
 def main(global_config, **settings):
