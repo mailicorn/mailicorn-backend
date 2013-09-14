@@ -15,7 +15,7 @@ def initialize_sql(engine):
     import hashlib
     new_user = User(email='sterling@isis.com',
                     name='archer',
-                    password=hashlib.sha512('herpderp'),
+                    password=hashlib.sha512('herpderp').hexdigest(),
                     )
     folder = Folder(name='INBOX')
     new_acc = Account(
