@@ -16,4 +16,6 @@ def main(global_config, **settings):
     config.set_authorization_policy(authz_policy)
     config.include("cornice")
     config.scan("mailicorn.views")
+    engine = create_engine(settings['sqlalchemy.uri'])
+    initialize_sql(engine)
     return config.make_wsgi_app()
