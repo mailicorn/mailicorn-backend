@@ -1,0 +1,5 @@
+#!/bin/env python
+from mailicorn.worker import await_mail, apply_rule
+
+if __name__ == '__main__':
+    await_mail(apply_rule, 'indexed-msg')
