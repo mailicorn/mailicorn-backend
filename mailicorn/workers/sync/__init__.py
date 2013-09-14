@@ -71,6 +71,7 @@ class SyncWorker(object):
         password = account.password
         folders = account.folders
         owner_id = account.owner_id
+        owner = DBSession.query(User).filter(User.id==owner_id).one()
         server = IMAPClient(host, port=port, use_uid=True, ssl=ssl)
         server.login(username, password)
         for folder in folders:
@@ -79,6 +80,9 @@ class SyncWorker(object):
             response = server.fetch(messages, ['FLAGS', 'BODY'])
             for msgid, data in response.iteritems():
                 MID = hashlib.sha512(str(msgid) + str(account.owner_id)).hexdigest()
+                owner.messages.append(MID)
+                DBSession.add(owner)
+                DBSession.commit()
                 body = data['BODY']
                 flags = data['FLAGS']
                 mail_dict = {'mid': MID,
