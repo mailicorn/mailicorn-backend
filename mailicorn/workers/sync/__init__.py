@@ -115,7 +115,7 @@ class SyncWorker(object):
             user = user_query.one()
             for account in user.accounts:
                 gevent.spawn(self.imap_sync, account)
-            self.sync_queue.delete(msg)
+            self.sync_queue.delete_message(msg)
 
 def main():
     inifile = sys.argv[1]
