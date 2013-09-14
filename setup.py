@@ -38,6 +38,7 @@ setup(name='mailicorn',
     entry_points = """\
     [console_scripts]
       syncworker = mailicorn.workers.sync:main
+      mailicorn_adduser = mailicorn.models:create_test_user
     [paste.app_factory]
     main = mailicorn:main
     """,

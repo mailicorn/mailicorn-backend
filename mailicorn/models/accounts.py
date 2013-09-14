@@ -4,7 +4,8 @@ from sqlalchemy.orm import relationship
 
 class Folder(_Base):
     __tablename__ = 'folders'
-    name = Column(Unicode(255), primary_key=True)
+    id = Column(Integer, unique=True, primary_key=True)
+    name = Column(Unicode(255))
     account_id = Column(ForeignKey('accounts.id'))
 
 
