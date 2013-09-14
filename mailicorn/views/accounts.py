@@ -12,6 +12,7 @@ from mailicorn.models.accounts import Account
                                        'port',
                                        'imap_root',
                                        'seperator',
+                                       'folders',
                                        'sync_int',
                                        'ssl')])
 def AddAccount(request):
@@ -24,6 +25,7 @@ def AddAccount(request):
         'port',
         'imap_root',
         'seperator',
+        'folders',
         'sync_int',
         'ssl'
     }
@@ -46,6 +48,11 @@ def AddAccount(request):
         sync_int=request.validated['json']['sync_int'],
         ssl=request.validated['json']['ssl'],
     )
+    folders = request.validated['json']['folders']
+    if isinstance(folders, list):
+        new_acc.folders = folders
+    else:
+        new_acc.folders = [folders, ]
     print new_acc.owner_id
     DBSession.add(new_acc)
     DBSession.commit()
