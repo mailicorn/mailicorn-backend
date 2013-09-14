@@ -1,22 +1,19 @@
-from mailicorn.services import Users, UsersLogin, UsersLogout
-from mailicorn.validators import LoggedIn, ValidJSON, ValidFields, JSON
+from mailicorn.services import Accounts
+from mailicorn.validators import LoggedIn, ValidJSON, ValidFields
 from mailicorn.models import DBSession
-from mailicorn.models.users import User
 from mailicorn.models.accounts import Account
-from pyramid.security import remember, forget
-from webob import Response
 
 
-@Users.post(validators=[LoggedIn,
-                        ValidJSON,
-                        ValidFields('username',
-                                    'password',
-                                    'host',
-                                    'port',
-                                    'imap_root',
-                                    'seperator',
-                                    'sync_int',
-                                    'ssl')])
+@Accounts.post(validators=[LoggedIn,
+                           ValidJSON,
+                           ValidFields('username',
+                                       'password',
+                                       'host',
+                                       'port',
+                                       'imap_root',
+                                       'seperator',
+                                       'sync_int',
+                                       'ssl')])
 def AddAccount(request):
     """
     ->
@@ -49,6 +46,7 @@ def AddAccount(request):
         sync_int=request.validated['json']['sync_int'],
         ssl=request.validated['json']['ssl'],
     )
+    print new_acc.owner_id
     DBSession.add(new_acc)
     DBSession.commit()
     return {
