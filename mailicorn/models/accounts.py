@@ -1,5 +1,11 @@
 from mailicorn.models import _Base
-from sqlalchemy import Integer, Unicode, Column, ForeignKey
+from sqlalchemy import Integer, Unicode, Column, ForeignKey, Boolean
+from sqlalchemy.orm import relationship
+
+class Folder(_Base):
+    __tablename__ = 'folders'
+    name = Column(Unicode(255), primary_key=True)
+    account_id = Column(ForeignKey('accounts.id'))
 
 
 class Account(_Base):
@@ -14,6 +20,9 @@ class Account(_Base):
     imap_root = Column(Unicode(255))
     seperator = Column(Unicode(255))
     sync_int = Column(Integer) # time in secs between sync jobs
+    ssl = Column(Boolean)
+    folders = relationship("Folder")
+
 
     def to_dict(self):
         return {"id": self.id,
@@ -23,5 +32,6 @@ class Account(_Base):
                 "port": self.port,
                 "imap_root": self.imap_root,
                 "seperator": self.seperator,
-                "sync_int": self.sync_int
+                "sync_int": self.sync_int,
+                'folders': [f.name for f in self.folders]
                 }
