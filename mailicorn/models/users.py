@@ -1,4 +1,6 @@
 from mailicorn.models import _Base, DBSession
+from mailicorn.models.rules import Rule
+from mailicorn.models.accounts import Account
 from sqlalchemy import Integer, Unicode, Column, ForeignKey
 from sqlalchemy.orm import relationship
 
