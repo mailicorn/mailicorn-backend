@@ -10,4 +10,25 @@ def initialize_sql(engine):
     _Base.metadata.bind = engine
     _Base.metadata.drop_all()
     _Base.metadata.create_all(engine, checkfirst=False)
-
+    from mailicorn.models.users import User
+    from mailicorn.models.accounts import Account, Folder
+    import hashlib
+    new_user = User(email='sterling@isis.com',
+                    name='archer',
+                    password=hashlib.sha512('herpderp'),
+                    )
+    folder = Folder(name='INBOX')
+    new_acc = Account(
+        username='sterling@isis.com',
+        password='thisisntapassword',
+        host='localhost',
+        port=666,
+        imap_root='',
+        seperator='/',
+        sync_int=500,
+        ssl=True,
+    )
+    new_acc.folders = [folder, ]
+    new_user.accounts = [new_acc, ]
+    DBSession.add(new_user)
+    DBSession.commit()

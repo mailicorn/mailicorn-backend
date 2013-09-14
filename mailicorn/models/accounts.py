@@ -11,7 +11,7 @@ class Folder(_Base):
 class Account(_Base):
     __tablename__ = 'accounts'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, unique=True, primary_key=True)
     owner_id = Column(Integer, ForeignKey('users.id'))
     username = Column(Unicode(255))
     password = Column(Unicode(255))
@@ -21,7 +21,7 @@ class Account(_Base):
     seperator = Column(Unicode(255))
     sync_int = Column(Integer) # time in secs between sync jobs
     ssl = Column(Boolean)
-    folders = relationship("Folder")
+    folders = relationship("Folder", backref='account')
 
 
     def to_dict(self):
