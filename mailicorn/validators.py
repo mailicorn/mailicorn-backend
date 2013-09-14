@@ -1,5 +1,6 @@
 import json
-from mailicorn.models import DBSession, User
+from mailicorn.models import DBSession
+from mailicorn.models.users import User
 from pyramid.security import authenticated_userid
 from pyramid.httpexceptions import HTTPUnauthorized, HTTPExpectationFailed
 from re import compile
@@ -41,14 +42,18 @@ def ValidFields(*fields):
                 return HTTPExpectationFailed()
 
 
+def JSON(request):
+    data = json.loads(request.body)
+    request.validated['json'] = data
+
+
 def ValidJSON(request):
     """
     Strip any html from a json blob
     """
-    data = json.loads(request.body)
-    for key, value in data.items():
-        data[key] = _html_replace(value)
-    request.validated['json'] = data
+    JSON(request)
+    for key, value in request.validated['json'].items():
+        request.validated['json'][key] = _html_replace(value)
 
 
 def ValidText(request):
