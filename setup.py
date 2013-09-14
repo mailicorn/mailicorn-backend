@@ -31,7 +31,7 @@ setup(name='mailicorn',
         'waitress',
         'sqlalchemy',
         'boto',
-        'python-memcached',
+        'pylibmc',
     ],
     entry_points = """\
     [paste.app_factory]

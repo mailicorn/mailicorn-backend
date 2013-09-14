@@ -1,15 +1,15 @@
 import boto
 import json
 import time
-import memcache
+import pylibmc
 
 
-memcache_host = 'mailicache.ucd9qd.cfg.use1.cache.amazonaws.com:11211'
-client = memcache.Client([memcache_host], debug=0)
+memcache_host = 'mailicache.ucd9qd.0001.use1.cache.amazonaws.com'
+mc = pylibmc.Client([memcache_host])
 
 
 def get_msg_body(mid):
-    return client.get(mid)
+    return mc.get(mid)
 
 bucket = boto.connect_s3().get_bucket('archive.mailicorn.com')
 
@@ -65,3 +65,12 @@ def await_mail(to_call_on, queue_name=None):
         print "Of type ", type(msg)
         msg.delete()
         exit()
+
+if __name__ == '__main__':
+
+    mails = json.loads(open(
+        '/home/ryansb/code/mailicorn-backend/mail_test.json').read())
+    for m in mails:
+        print mc.set(str(m['mid']), str(json.dumps(m)))
+
+    print mc.get("7eb04e1076c95ae50d75a3c88537b37b07550804")
