@@ -1,8 +1,8 @@
 from mailicorn.services import Users, UsersLogin, UsersLogout
-from mailicorn.validators import UserValidator, LoggedIn, ValidText
+from mailicorn.validators import LoggedIn, ValidJSON
 
 
-@Users.post(validators=[UserValidator])
+@Users.post(validators=[ValidJSON])
 def AddUser(request):
     """
     ->
@@ -39,7 +39,7 @@ def GetUserInfo(request):
     pass
 
 
-@UsersLogin.post(validators=[ValidText])
+@UsersLogin.post(validators=[ValidJSON])
 def LoginUser(requset):
     """
     -> Auth Cookies
