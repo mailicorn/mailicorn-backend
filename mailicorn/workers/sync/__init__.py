@@ -106,7 +106,7 @@ class SyncWorker(object):
         """
         while True:
             msg = GetFromQueue(self.sync_queue)
-            user_id = int(msg.body())
+            user_id = int(msg.get_body())
             user_query = DBSession.query(User).filter(User.id==user_id)
             if user_query.count() == 0:
                 self.sync_queue.delete_message(msg)
