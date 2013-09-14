@@ -2,27 +2,25 @@ from mailicorn.services import SearchTags, SearchText
 from mailicorn.validators import LoggedIn, ValidText
 
 
-@SearchTags.get(validators=[LoggedIn, ValidText])
-def SearchByTags(request):
-    """
-    ->
-    {
-        messages: []
-    }
-    """
-    pass
-
-
-@SearchText.get(validators=[LoggedIn, ValidText])
-def SearchByFullText(request):
+@Search.get(validators=[LoggedIn, ValidText])
+def SearchByParams(request):
     """
     ,<-
     {
-        text: ""
+        "to": "<query>",
+        "from": "<query>",
+        "cc": "<query>",
+        "bcc": "<query>",
+        "tags": "<query>",
+        "mid": "<query>",
+        "hasattachment": "<query>",
+        "subject": "<query>",
+        "fulltext": "<query>",
     }
     ->
     {
-        messages: []
+    "query": {input query json}
+    "messages": [{ <message> }, ...]
     }
     """
     pass
