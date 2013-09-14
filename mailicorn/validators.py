@@ -3,7 +3,7 @@ from mailicorn.models import DBSession
 from mailicorn.models.users import User
 from pyramid.security import authenticated_userid
 from pyramid.httpexceptions import HTTPUnauthorized, HTTPExpectationFailed
-from re import compile
+from re import compile as re_compile
 
 
 def LoggedIn(request):
@@ -25,9 +25,9 @@ def LoggedIn(request):
 def _html_replace(text):
     """
     Replace html tags from the given text
+    replace = html_tags.sub('', text)
     """
-    html_tags = compile("(?'tag_start'</?)(?'tag'\w+)((\s+(?'attr'(?'attr_name'\w+)(\s*=\s*(?:"".*?""|'.*?'|[^'"">\s]+)))?)+\s*|\s*)(?'tag_end'/?>)")
-    return html_tags.sub('', text)
+    return text
 
 
 def ValidFields(*fields):
@@ -40,6 +40,7 @@ def ValidFields(*fields):
         for key in fields:
             if key not in data:
                 return HTTPExpectationFailed()
+    return validator
 
 
 def JSON(request):
@@ -52,8 +53,10 @@ def ValidJSON(request):
     Strip any html from a json blob
     """
     JSON(request)
+    valid = {}
     for key, value in request.validated['json'].items():
-        request.validated['json'][key] = _html_replace(value)
+        valid[key] = _html_replace(value)
+    request.validated['json'].update(valid)
 
 
 def ValidText(request):

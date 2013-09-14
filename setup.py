@@ -32,8 +32,12 @@ setup(name='mailicorn',
         'sqlalchemy',
         'boto',
         'pylibmc',
+        'gevent',
+        'imapclient'
     ],
     entry_points = """\
+    [entry_points]
+      syncworker = mailicorn.workers.sync:main
     [paste.app_factory]
     main = mailicorn:main
     """,

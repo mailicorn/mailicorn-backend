@@ -11,15 +11,6 @@ mc = pylibmc.Client([memcache_host])
 def get_msg_body(mid):
     return mc.get(mid)
 
-bucket = boto.connect_s3().get_bucket('archive.mailicorn.com')
-
-
-def archive_mail(mid):
-    body = get_msg_body(mid)
-    key = bucket.new_key(mid)
-    key.set_contents_from_string(body)
-    return True
-
 
 cs = boto.connect_cloudsearch()
 
