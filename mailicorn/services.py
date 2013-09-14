@@ -5,6 +5,7 @@ Users = Service("users", "/users", description='User management api')
 UsersLogin = Service('users-login', '/users/login', description='Login a user in')
 UsersLogout = Service('users-logout', '/users/logout')
 
+Accounts = Service("accounts", "/accounts", description='Account management api')
 
 MailID = Service('mail-id', '/mail/id/{id}', description='Manage Email via ID')
 MailTags = Service('mail-tags', '/mail/{id}/tags/', description='Grab/Edit mail tags')
