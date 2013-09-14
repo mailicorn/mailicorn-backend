@@ -26,7 +26,7 @@ setup(name='mailicorn',
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
-    install_requires=['cornice', 'waitress'],
+    install_requires=['cornice', 'waitress', 'sqlalchemy'],
     entry_points = """\
     [paste.app_factory]
     main = mailicorn:main
