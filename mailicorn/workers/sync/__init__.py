@@ -52,7 +52,9 @@ class SyncWorker(object):
                 config.get('app:main', 'queue.search'))
         self.sync_queue = self.sqs.get_queue(
             config.get('app:main', 'queue.sync'))
-        self.ec = pylibmc.Client(config.get('app:main', 'cache.uri'))
+        self.ec = pylibmc.Client([
+            config.get('app:main', 'cache.uri'),
+        ])
 
 
     def imap_sync(self, account):
@@ -65,12 +67,11 @@ class SyncWorker(object):
         host = account.host
         port = account.port
         ssl = account.ssl
-        conn_string = "{0}:{1}".format(host, port)
         username = account.username
         password = account.password
         folders = account.folders
         owner_id = account.owner_id
-        server = IMAPClient(conn_string, use_uid=True, ssl=ssl)
+        server = IMAPClient(host, port=port, use_uid=True, ssl=ssl)
         server.login(username, password)
         for folder in folders:
             server.select_folder(folder.name)
@@ -96,7 +97,7 @@ class SyncWorker(object):
 
                 # Store backup in s3 (done last since long running)
                 key = self.bucket.new_key(MID)
-                key.set_contents_from_str(MID, mail_json)
+                key.set_contents_from_str(mail_json)
         server.logout()
 
 
